@@ -1,0 +1,355 @@
+﻿<Window x:Class="Test.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
+        xmlns:local="clr-namespace:Test"
+        mc:Ignorable="d"
+        Title="Notatki" Height="740" Width="1000" Loaded="Window_Loaded">
+    <Window.Resources>
+        <local:ImagePathConverter x:Key="ImagePathConverter"/>
+        <!--Styl przyciskow-->
+        <Style x:Key="MyFocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Control}">
+                        <Grid Margin="3 2">
+                            <Rectangle Name="r1" StrokeThickness="1" Stroke="Black" StrokeDashArray="2 2"/>
+                            <Border Name="border" Width="{TemplateBinding ActualWidth}" Height="{TemplateBinding ActualHeight}"  CornerRadius="2" BorderThickness="1" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ShadowStyle">
+            <Setter Property="Control.Foreground" Value="LightGray" />
+        </Style>
+
+        <Style x:Key="ButtonLeftPanel" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="FontFamily" Value="Verdana"/>
+            <Setter Property="FontSize" Value="11px"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FocusVisualStyle" Value="{StaticResource MyFocusVisual}" />
+            <Setter Property="Background" >
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1" >
+                        <GradientStop Color="LightBlue" Offset="0.2"/>
+                        <GradientStop Color="Pink" Offset="0.85"/>
+                        <GradientStop Color="#FFFFD190" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" 
+        				BorderThickness="1"
+        				Padding="4,2" 
+        				BorderBrush="DarkGray" 
+        				CornerRadius="3" 
+        				Background="{TemplateBinding Background}">
+                            <Grid >
+                                <ContentPresenter HorizontalAlignment="Center" 
+        	                           VerticalAlignment="Center" Name="contentShadow" 
+        					Style="{StaticResource ShadowStyle}">
+                                    <ContentPresenter.RenderTransform>
+                                        <TranslateTransform X="1.0" Y="1.0" />
+                                    </ContentPresenter.RenderTransform>
+                                </ContentPresenter>
+                                <ContentPresenter HorizontalAlignment="Center" 
+                                    VerticalAlignment="Center" Name="content"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#FF4788c8" />
+                                <Setter Property="Foreground" Value="DarkMagenta" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" >
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1" >
+                                            <GradientStop Color="LightCoral" Offset="0.35"/>
+                                            <GradientStop Color="Pink" Offset="0.95"/>
+                                            <GradientStop Color="LightGoldenrodYellow" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter TargetName="content" Property="RenderTransform" >
+                                    <Setter.Value>
+                                        <TranslateTransform Y="1.0" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsDefaulted" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="Pink" />
+                            </Trigger>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="Pink" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="border" Property="Opacity" Value="0.7" />
+                                <Setter Property="Foreground" Value="Gray" />
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!--Styl textboxa-->
+        <Style TargetType="TextBox">
+                <Style.Triggers>
+                    <Trigger Property="IsEnabled" Value="True">
+                        <Setter Property="Background">
+                            <Setter.Value>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="LightBlue" Offset="0.0" />
+                                    <GradientStop Color="AliceBlue" Offset="0.25" />
+                                    <GradientStop Color="BlanchedAlmond" Offset="0.75" />
+                                    <GradientStop Color="Wheat" Offset="1.0" />
+                                </LinearGradientBrush>
+                            </Setter.Value>
+                        </Setter>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+      
+        <Style x:Key="ListboxItemsStyle" TargetType="{x:Type ListBoxItem}">
+            <Setter Property="SnapsToDevicePixels" Value="true"/>
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border Name="Border" Padding="7" SnapsToDevicePixels="True" Background="{TemplateBinding Background}">
+                            <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="true">
+                                <Setter TargetName="Border" Property="Background" Value="LightCyan"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!--Styl checkboxa-->
+        <Style TargetType="CheckBox" x:Key="CircleCheckbox">
+        <Setter Property="Cursor" Value="Hand"></Setter>   
+        <Setter Property="Content" Value=""></Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type CheckBox}">                   
+                    <Grid Width="20" Height="20">                     
+                        <Ellipse x:Name="outerEllipse">
+                            <Ellipse.Fill>
+                                <RadialGradientBrush>
+                                    <GradientStop Offset="0" Color="Red"/>
+                                    <GradientStop Offset="0.88" Color="LightCoral"/>
+                                    <GradientStop Offset="1" Color="DarkRed"/>
+                                </RadialGradientBrush>
+                            </Ellipse.Fill>
+                        </Ellipse>
+                        <Ellipse Margin="10" x:Name="highlightCircle" >
+                            <Ellipse.Fill >
+                                <LinearGradientBrush >
+                                    <GradientStop Offset="0" Color="Green"/>
+                                    <GradientStop Offset="0.5" Color="LightGreen"/>
+                                    <GradientStop Offset="1" Color="DarkGreen"/>
+                                </LinearGradientBrush>
+                            </Ellipse.Fill>
+                        </Ellipse>
+                        <ContentPresenter x:Name="content" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="highlightCircle" Property="Fill">
+                                <Setter.Value>
+                                    <LinearGradientBrush StartPoint="0.3,0" EndPoint="0.7,1">
+                                        <GradientStop Offset="0" Color="Green"/>
+                                        <GradientStop Offset="0.5" Color="LightGreen"/>
+                                        <GradientStop Offset="1" Color="DarkGreen"/>
+                                    </LinearGradientBrush>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter TargetName="outerEllipse" Property="Fill">
+                                <Setter.Value>
+                                    <RadialGradientBrush>
+                                        <GradientStop Offset="0" Color="Green"/>
+                                        <GradientStop Offset="0.88" Color="LightGreen"/>
+                                        <GradientStop Offset="1" Color="DarkGreen"/>
+                                    </RadialGradientBrush>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="False">
+                            <Setter TargetName="highlightCircle" Property="Fill">
+                                <Setter.Value>
+                                    <LinearGradientBrush StartPoint="0.3,0" EndPoint="0.7,1">
+                                        <GradientStop Offset="0" Color="Red"/>
+                                        <GradientStop Offset="0.5" Color="LightCoral"/>
+                                        <GradientStop Offset="1" Color="DarkRed"/>
+                                    </LinearGradientBrush>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>   
+    </Window.Resources>
+    <Window.Background>
+        <SolidColorBrush Opacity="0.5" Color="Cyan"/>
+    </Window.Background>
+    <Grid Margin="0" DataContext="{Binding ElementName=MainList, Path=SelectedItem}">
+        <!--<Grid.Triggers>
+            <EventTrigger RoutedEvent="Button.Click" SourceName="Usuwanie_zadania">
+                <BeginStoryboard Name="AnimacjaZnikaniaZListBoxa">
+                    <Storyboard>
+                        <DoubleAnimation Storyboard.TargetName="ItemContainer" Storyboard.TargetProperty="Opacity"
+                                         Duration="0:0:2" From="1" To="0">
+                        </DoubleAnimation>
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger> 
+        </Grid.Triggers>-->
+        <Grid.Background>
+          <ImageBrush ImageSource="C:\Users\Piotr\source\repos\Test\Images\Test_tła_gridu.jpg" Stretch="UniformToFill"/>
+        </Grid.Background>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="1.5*" />
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0">
+            <Label>Wybór Sortowania</Label>
+            <ComboBox Name="Sort" Margin="5" SelectedIndex="0">
+              <ComboBoxItem Selected="SortNone">Bez sortowania</ComboBoxItem>
+              <ComboBoxItem Selected="SortName">Według nazwy</ComboBoxItem>
+              <ComboBoxItem Selected="SortCategory">Według kategorii</ComboBoxItem>
+              <ComboBoxItem Selected="SortDate">Według daty zakończenia</ComboBoxItem>
+            </ComboBox>
+            <Label>Wybór Grupowania</Label>
+            <ComboBox Name="Group" Margin="5" SelectedIndex="0">
+              <ComboBoxItem Selected="GroupNone">Bez grupowania</ComboBoxItem>
+              <ComboBoxItem Selected="GroupUrgency">Według stopnia pilności</ComboBoxItem>
+              <ComboBoxItem Selected="GroupCategory">Według kategorii</ComboBoxItem>
+            </ComboBox>
+            <Label></Label>
+            <Button Style="{StaticResource ButtonLeftPanel}" Name="Dodawanie_zadania" Click="Dodaj_zadanie" Margin="5">Dodaj zadanie</Button>
+            <Button Style="{StaticResource ButtonLeftPanel}" Name="Usuwanie_zadania" Click="Usun_zadanie" Margin="5">Usuń zadanie</Button>
+            <Button Style="{StaticResource ButtonLeftPanel}" Name="Edytowanie_zadania" Click="Edytuj_zadanie" Margin="5">Edytuj zadanie</Button>
+            <Button Style="{StaticResource ButtonLeftPanel}" Name="Dodawanie_etapu" Margin="5" Click="Niespodzianka">Tetris</Button>
+            <Button Style="{StaticResource ButtonLeftPanel}" Name="Edytowanie_etapu" Margin="5" Click="AdwancedOnClick">Wykres</Button>
+            <Button Style="{StaticResource ButtonLeftPanel}" Margin="5" Click="Zamknij">Zamknij</Button>
+            <Image gif:ImageBehavior.AnimatedSource="C:\Users\Piotr\source\repos\Test\Images\tenor.gif" Margin="3" Width="auto" Height="auto" Stretch="Uniform"></Image>
+        </StackPanel>
+        <GridSplitter ResizeDirection="Columns" Grid.Column="1" Height="Auto" Width="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                      Margin="0" Background="DarkCyan"/>
+        <GridSplitter ResizeDirection="Columns" Grid.Column="3" Height="Auto" Width="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                      Margin="0" Background="DarkCyan"/>
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <TextBox Name="SearchTextBox" TextChanged="Searching" Margin="5" Grid.Row="0">
+            </TextBox>
+            <ListBox Name="MainList" Margin="5" Grid.Row="1" ScrollViewer.CanContentScroll="False" HorizontalContentAlignment="Stretch"
+                     SelectedIndex="0" Background="Pink" SelectionChanged="MainList_selection" ItemContainerStyle="{StaticResource ListboxItemsStyle}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="1" BorderThickness="1" BorderBrush="SteelBlue" CornerRadius="4">
+                            <Border.Background>
+                                <LinearGradientBrush Opacity="0.5" StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="LightCoral" Offset="0.0" />
+                                    <GradientStop Color="Cyan" Offset="0.25" />
+                                    <GradientStop Color="Pink" Offset="0.75" />
+                                    <GradientStop Color="LightPink" Offset="1.0" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <DockPanel>
+                                <Image Grid.Column="0" Source="{Binding Path=ImageTitle, Converter={StaticResource ImagePathConverter}}"
+                                       Margin="3" Width="90" HorizontalAlignment="Left"></Image>
+                                <Grid Margin="3">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Grid.Column="0" FontWeight="Bold"
+                                    Text="{Binding Path=Category}"/>
+                                    <TextBlock Grid.Column="0" Grid.Row="1"
+                                    Text="{Binding Path=Content}"/>
+                                    <TextBlock Grid.Column="0" Grid.Row="2"
+                                    Text="{Binding Path=Urgency}"/>
+                                </Grid>
+                                <CheckBox HorizontalAlignment="Right" Margin="5" Name="TaskFinished" Style="{StaticResource CircleCheckbox}"
+                                          IsChecked="{Binding Path=IsTaskChecked}" Checked="TaskCheckboxChecked" Tag="{Binding Path=Content}"></CheckBox>
+                            </DockPanel>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+        <Grid Grid.Column="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Border Background="LightBlue" BorderBrush="Black" BorderThickness="2" CornerRadius="10" Padding="5" Margin="5">
+                <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <Label Grid.Column="0" Grid.Row="0">Zadanie:</Label>
+                <Label Grid.Column="0" Grid.Row="1">Pilność:</Label>
+                <Label Grid.Column="0" Grid.Row="2">Rozpoczęcie:</Label>
+                <Label Grid.Column="0" Grid.Row="3">Zakonczenie:</Label>
+                <Label Grid.Column="0" Grid.Row="4">Etapy</Label>
+                <TextBlock Margin="5" Grid.Column="1" Grid.Row="0" Text="{Binding Path=Content}"></TextBlock>
+                <TextBlock Margin="5" Grid.Column="1" Grid.Row="1" Text="{Binding Path=Urgency}"></TextBlock>
+                <TextBlock Margin="5" Grid.Column="1" Grid.Row="2" Text="{Binding Path=StartDate, StringFormat=dd-MM-yyyy}"></TextBlock>
+                <TextBlock Margin="5" Grid.Column="1" Grid.Row="3" Text="{Binding Path=EndDate, StringFormat=dd-MM-yyyy}"></TextBlock>
+            </Grid>
+          </Border>
+            <ListBox Name="StagesList" Margin="5" Grid.Row="1" ItemsSource="{Binding Path=Stages}" ItemContainerStyle="{StaticResource ListboxItemsStyle}"
+                     ScrollViewer.CanContentScroll="False" HorizontalContentAlignment="Stretch" SelectedIndex="0">
+                <ListBox.ItemTemplate>
+                  <DataTemplate>
+                    <DockPanel>
+                      <Border Background="Transparent" BorderBrush="Black" BorderThickness="2" CornerRadius="10" Padding="5" Margin="0">
+                        <DockPanel>
+                            <TextBlock Text="{Binding Path=.}"></TextBlock>
+                                    <CheckBox HorizontalAlignment="Right" Tag="{Binding Path=.}" Checked="StagesCheckBoxChecked"
+                                              Unchecked="StagesCheckBoxChecked" IsChecked="{Binding Path=IsStagesListCheckBoxChecked}"
+                                              Style="{StaticResource CircleCheckbox}"/>
+                        </DockPanel>
+                      </Border>
+                    </DockPanel>
+                  </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.Background>
+                  <SolidColorBrush Opacity="0.5"></SolidColorBrush>
+                </ListBox.Background>
+            </ListBox>
+            <Button Click="DeleteStage" Style="{StaticResource ButtonLeftPanel}" Margin="5" Grid.Row="2">Usuń etap</Button>
+        </Grid>
+    </Grid>
+</Window>

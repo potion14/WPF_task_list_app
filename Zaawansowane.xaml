@@ -1,0 +1,29 @@
+﻿<Window x:Class="FlexPieQuickStart.Zaawansowane"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FlexPieQuickStart"
+        mc:Ignorable="d"
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        xmlns:Chart="http://schemas.componentone.com/winfx/2006/xaml"
+        Title="Zaawansowane" Height="450" Width="800">
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="C:\Users\Piotr\source\repos\Test\Images\Test_tła_gridu.jpg" Stretch="UniformToFill"/>
+        </Grid.Background>
+        <Chart:C1FlexPie 
+            x:Name="flexPie" 
+            Binding="April"
+            BindingName="Fruit" 
+            ItemsSource="{Binding DataContext.Data}">
+            <Chart:C1FlexPie.SelectionStyle>
+                <Chart:ChartStyle Stroke="Red" 
+                                  StrokeThickness="2"/>
+            </Chart:C1FlexPie.SelectionStyle>
+            <Chart:C1FlexPie.DataLabel>
+                <Chart:PieDataLabel Content="{}{y}"/>
+            </Chart:C1FlexPie.DataLabel>
+        </Chart:C1FlexPie>
+    </Grid>
+</Window>
